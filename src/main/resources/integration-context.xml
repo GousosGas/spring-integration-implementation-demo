@@ -9,18 +9,26 @@
 
     <int:gateway service-interface="com.demo.integration.demointegration.PrinterGateway"
                  default-request-channel="inputChannel"/>
-    <int:channel id="inputChannel">
-        <int:priority-queue capacity="10"/>
-    </int:channel>
+
+    <int:channel id="inputChannel"/>
+
     <bean id="printService"
           class="com.demo.integration.demointegration.PrintService"/>
+    <bean id="upperCasePrintService"
+          class="com.demo.integration.demointegration.UpperCasePrintService"/>
+
     <int:service-activator
+            order="2"
                 ref="printService"
                 method="print"
                 input-channel="inputChannel"
     >
-        <int:poller fixed-rate="5"
-                    time-unit="SECONDS"
-                    max-messages-per-poll="2"/>
     </int:service-activator>
+
+    <int:service-activator
+                order="1"
+                ref="upperCasePrintService"
+                method="print"
+                input-channel="inputChannel"
+    />
 </beans>
