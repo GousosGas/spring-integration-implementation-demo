@@ -10,7 +10,7 @@
     <int:gateway service-interface="com.demo.integration.demointegration.PrinterGateway"
                  default-request-channel="inputChannel"/>
     <int:channel id="inputChannel">
-        <int:queue capacity="10"/>
+        <int:priority-queue capacity="10"/>
     </int:channel>
     <bean id="printService"
           class="com.demo.integration.demointegration.PrintService"/>
