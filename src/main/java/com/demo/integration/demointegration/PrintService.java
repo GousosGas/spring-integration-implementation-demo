@@ -4,6 +4,6 @@ import org.springframework.messaging.Message;
 
 public class PrintService {
     public void print(Message<?> message){
-        System.out.println("in string payload" +message.getPayload());
+        System.out.println("PrintService: " +message.getPayload());
     }
 }

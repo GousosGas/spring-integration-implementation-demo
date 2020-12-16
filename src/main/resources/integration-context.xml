@@ -15,21 +15,19 @@
     <int:channel id="inputChannel"/>
     <int:channel id="defaultChannel"/>
 
-    <!--Recepient List Router-->
-    <int:recipient-list-router input-channel="inputChannel"
-                               default-output-channel="defaultChannel">
-        <int:recipient selector-expression="payload.equals(5)"
-                       channel="intChannel"/>
-        <int:recipient selector-expression="payload.equals(51)"
-                       channel="stringChannel"/>
-    </int:recipient-list-router>
+    <!--Custom Router Beans-->
+    <bean id="customRouter"
+          class="com.demo.integration.demointegration.CustomRouter"/>
+
+    <!--Custom Router-->
+    <int:router ref="customRouter" input-channel="inputChannel"/>
 
     <!--Beans-->
     <bean id="printService"
           class="com.demo.integration.demointegration.PrintService"/>
     <bean id="numericPrintService"
           class="com.demo.integration.demointegration.NumericPrintService"/>
-<bean id="defaultService"
+    <bean id="defaultService"
           class="com.demo.integration.demointegration.DefaultService"/>
 
     <!--Endpoint-->
