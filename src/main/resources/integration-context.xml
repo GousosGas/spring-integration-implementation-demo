@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <beans xsi:schemaLocation="http://www.springframework.org/schema/beans
+<beans xsi:schemaLocation="http://www.springframework.org/schema/beans
      http://www.springframework.org/schema/beans/spring-beans.xsd
       http://www.springframework.org/schema/integration
        http://www.springframework.org/schema/integration/spring-integration-4.2.xsd"
-           xmlns:int="http://www.springframework.org/schema/integration"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns="http://www.springframework.org/schema/beans">
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans">
 
     <!--gateway will receive a msg and pass it to the the input channel-->
     <int:gateway service-interface="com.demo.integration.demointegration.PrinterGateway"
@@ -13,34 +13,43 @@
 
     <!--Channel-->
     <int:channel id="inputChannel"/>
+    <int:channel id="defaultChannel"/>
 
-    <!--Router-->
-    <int:header-value-router
-            input-channel="inputChannel"
-            header-name="routeHeader"
-    >
-        <int:mapping value="int" channel="inputChannel"/>
-        <int:mapping value="string" channel="stringChannel"/>
-    </int:header-value-router>
+    <!--Recepient List Router-->
+    <int:recipient-list-router input-channel="inputChannel"
+                               default-output-channel="defaultChannel">
+        <int:recipient selector-expression="payload.equals(5)"
+                       channel="intChannel"/>
+        <int:recipient selector-expression="payload.equals(51)"
+                       channel="stringChannel"/>
+    </int:recipient-list-router>
 
     <!--Beans-->
     <bean id="printService"
           class="com.demo.integration.demointegration.PrintService"/>
     <bean id="numericPrintService"
           class="com.demo.integration.demointegration.NumericPrintService"/>
+<bean id="defaultService"
+          class="com.demo.integration.demointegration.DefaultService"/>
 
     <!--Endpoint-->
     <int:service-activator
-                ref="numericPrintService"
-                method="print"
-                input-channel="intChannel"
+            ref="numericPrintService"
+            method="print"
+            input-channel="intChannel"
     >
     </int:service-activator>
 
     <!--Endpoint-->
     <int:service-activator
-                ref="printService"
-                method="print"
-                input-channel="stringChannel"
+            ref="printService"
+            method="print"
+            input-channel="stringChannel"
+    />
+    <!--Endpoint-->
+    <int:service-activator
+            ref="defaultService"
+            method="print"
+            input-channel="defaultChannel"
     />
 </beans>
