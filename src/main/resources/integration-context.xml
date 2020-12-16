@@ -15,9 +15,13 @@
     <int:channel id="inputChannel"/>
     <int:channel id="outputChannel"/>
 
+    <!--Custom Filter Beans-->
+    <bean id="customFilter"
+          class="com.demo.integration.demointegration.CustomFIlter"/>
+
     <!--Filter-->
     <int:filter
-        expression="payload.equals(4)"
+        ref="customFilter"
         input-channel="inputChannel"
         output-channel="outputChannel"/>
 
