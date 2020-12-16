@@ -7,28 +7,37 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xmlns="http://www.springframework.org/schema/beans">
 
+    <!--gateway will receive a msg and pass it to the the input channel-->
     <int:gateway service-interface="com.demo.integration.demointegration.PrinterGateway"
                  default-request-channel="inputChannel"/>
 
+    <!--Channel-->
     <int:channel id="inputChannel"/>
 
+    <!--Router-->
+    <int:payload-type-router input-channel="inputChannel">
+        <int:mapping type="java.lang.Integer" channel="intChannel"/>
+        <int:mapping type="java.lang.String" channel="stringChannel"/>
+    </int:payload-type-router>
+
+    <!--Beans-->
     <bean id="printService"
           class="com.demo.integration.demointegration.PrintService"/>
-    <bean id="upperCasePrintService"
-          class="com.demo.integration.demointegration.UpperCasePrintService"/>
+    <bean id="numericPrintService"
+          class="com.demo.integration.demointegration.NumericPrintService"/>
 
+    <!--Endpoint-->
     <int:service-activator
-            order="2"
-                ref="printService"
+                ref="numericPrintService"
                 method="print"
-                input-channel="inputChannel"
+                input-channel="intChannel"
     >
     </int:service-activator>
 
+    <!--Endpoint-->
     <int:service-activator
-                order="1"
-                ref="upperCasePrintService"
+                ref="printService"
                 method="print"
-                input-channel="inputChannel"
+                input-channel="stringChannel"
     />
 </beans>

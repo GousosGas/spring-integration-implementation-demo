@@ -10,11 +10,6 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Future;
-
 @SpringBootApplication
 @Configuration
 @ImportResource("classpath:integration-context.xml")
@@ -29,24 +24,12 @@ public class DemoIntegrationApplication implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-
-        List<Future<Message<String>>> futureList =
-                new ArrayList<>();
-
         for (int i = 0; i < 10; i++) {
-            Message<String> message=
+            Message<?> message =
                     MessageBuilder
-                            .withPayload("Printing message payload for " +i)
-                            .setHeader("messageNum", i)
-                            .setPriority(i)
+                            .withPayload("hey"+i)
                             .build();
-            System.out.println("Sending message "+ i);
-            futureList.add(this.printerGateway.print(message));
+            this.printerGateway.print(message);
         }
-
-        for (Future<Message<String>> future: futureList
-             )
-            System.out.println(future.get().getPayload());
-
     }
 }

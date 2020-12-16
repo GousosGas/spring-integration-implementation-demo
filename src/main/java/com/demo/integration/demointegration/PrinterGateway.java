@@ -6,9 +6,9 @@ import java.util.concurrent.Future;
 
 /**
  * Gateway will pick the message and forward it
- * to the channel (inputChannel - queue channel)
+ * to the channel (inputChannel)
  * The Channel will deliver to the
- * service activator which will call the printService
+ * service activator which will call the related Service
  */
 public interface PrinterGateway {
     public Future<Message<String>> print(Message<?> message);
