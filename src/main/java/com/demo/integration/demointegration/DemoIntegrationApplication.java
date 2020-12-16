@@ -28,6 +28,7 @@ public class DemoIntegrationApplication implements ApplicationRunner {
             Message<?> message =
                     MessageBuilder
                             .withPayload("hey"+i)
+                            .setHeader("routeHeader","string")
                             .build();
             this.printerGateway.print(message);
         }
